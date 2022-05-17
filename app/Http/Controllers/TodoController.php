@@ -16,7 +16,7 @@ class TodoController extends Controller
      */
     public function index()
     {
-        $todos = Todo::latest()->paginate();
+        $todos = Todo::whereBelongsTo(Auth::user())->latest()->paginate();
         return view('admin.todos.index', compact('todos'));
     }
 
