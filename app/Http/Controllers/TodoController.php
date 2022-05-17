@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Todo;
 use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TodoController extends Controller
 {
@@ -37,7 +38,8 @@ class TodoController extends Controller
      */
     public function store(StoreTodoRequest $request)
     {
-        //
+        Auth::user()->todos()->create($request->all());
+        return back();
     }
 
     /**
@@ -71,7 +73,8 @@ class TodoController extends Controller
      */
     public function update(UpdateTodoRequest $request, Todo $todo)
     {
-        //
+        $todo->update(['done' => $request->done === "true" ? true : false]);
+        return response()->json($todo);
     }
 
     /**
@@ -82,6 +85,7 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        //
+        $todo->delete();
+        return response()->json(true);
     }
 }
